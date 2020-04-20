@@ -1,4 +1,4 @@
-/.idea/
+/.idea
 /vendor/
 node_modules/
 npm-debug.log
@@ -23,3 +23,5 @@ Homestead.json
 /.vagrant
 .phpunit.result.cache
 .idea/vcs.xml
+_ide_helper.php
+.DS_Store

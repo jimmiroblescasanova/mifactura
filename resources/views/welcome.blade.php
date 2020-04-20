@@ -81,7 +81,10 @@
 
             <div class="content">
                 <div class="title m-b-md">
-                    Hola, mundo!
+                    Hola, mundo! <br>
+                    @foreach ($data as $d)
+                        {{ $d->GuidDocument }}
+                    @endforeach
                 </div>
 
                 <div class="links">
