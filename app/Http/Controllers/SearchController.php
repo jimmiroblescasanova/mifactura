@@ -8,14 +8,17 @@ use Illuminate\Http\Request;
 
 class SearchController extends Controller
 {
-    public function search()
+    public function index()
     {
-        /*$documentos = DB::connection('sql_metadata')->table('Comprobante')
-        ->select(DB::raw('CAST(GuidDocument AS VARCHAR(36)) as GuidDocument, RFCEmisor, NombreReceptor'))
-        ->get();*/
+        return view('index');
+    }
 
-        $documentos = addComprobante::pluck('GuidDocument')->get();
+    public function search(Request $request)
+    {
+        $documento = addComprobante::where('UUID', $request->uuid)->get();
+        /*$documento = DB::connection('sql_metadata')->table('Comprobante')
+        ->where('UUID', $request['uuid'])->get();*/
 
-        return dd($documentos);
+        return view('search', compact('documento'));
     }
 }

@@ -2,9 +2,7 @@
 
 namespace App;
 
-use App\Scopes\GuidDocumentScope;
 use Illuminate\Database\Eloquent\Model;
-use Str;
 
 class addComprobante extends Model
 {
@@ -12,8 +10,13 @@ class addComprobante extends Model
 
     protected $table = 'Comprobante';
 
+    protected $dates = [
+        'Fecha',
+        'FechaTimbrado',
+    ];
+
     protected $casts = [
-        'GuidDocument' => 'string',
+      'Total' => 'double',
     ];
 
 }

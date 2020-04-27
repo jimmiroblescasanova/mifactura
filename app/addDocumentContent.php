@@ -4,7 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class DocumentosDigitales extends Model
+class addDocumentContent extends Model
 {
     protected $connection = 'sql_content';
 

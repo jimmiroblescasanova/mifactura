@@ -2,9 +2,11 @@
 
 namespace App;
 
+use Hash;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Str;
 
 class User extends Authenticatable
 {
@@ -15,9 +17,7 @@ class User extends Authenticatable
      *
      * @var array
      */
-    protected $fillable = [
-        'name', 'email', 'password',
-    ];
+    protected $fillable = ['name', 'rfc', 'email', 'password'];
 
     /**
      * The attributes that should be hidden for arrays.
@@ -36,4 +36,24 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function setPasswordAttribute($psw)
+    {
+        $this->attributes['password'] = Hash::make($psw);
+    }
+
+    public function setNameAttribute($name)
+    {
+        $this->attributes['name'] = strtoupper($name);
+    }
+
+    public function setRFCAttribute($rfc)
+    {
+        $this->attributes['rfc'] = strtoupper($rfc);
+    }
+
+    public function shortName()
+    {
+        return Str::limit($this->attributes['name'], 13);
+    }
 }
