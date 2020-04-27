@@ -24,4 +24,5 @@ Homestead.json
 .phpunit.result.cache
 .idea/vcs.xml
 _ide_helper.php
+_ide_helper_models.php
 .DS_Store

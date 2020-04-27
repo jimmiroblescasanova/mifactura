@@ -20,19 +20,20 @@ class DocumentController extends Controller
 
     public function selected(Request $request)
     {
-        $zip_file = url('storage/archivo_comprimido');
-        $zip = new ZipArchive;
+        $zip_file = url('archivo_comprimido');
+        $zip = new ZipArchive();
 
-        $files = \File::files(storage_path('public'));
+        $files = \File::files(public_path('storage'));
 
-        $zip->open($zip_file.'.zip', ZipArchive::CREATE);
-        foreach ($files as $key => $value) {
-            $relativeNameInZipFile = basename($value);
-            $zip->addFile($value, $relativeNameInZipFile);
+        if ($zip->open($zip_file . '.zip', ZipArchive::CREATE) === TRUE) {
+            foreach ($files as $key => $value) {
+                $relativeNameInZipFile = basename($value);
+                $zip->addFile($value, $relativeNameInZipFile);
+            }
+            $zip->close();
         }
-        $zip->close();
 
-        return response()->download($zip_file.'.zip');
+        return response()->download($zip_file . '.zip');
     }
 
     public function download($file)
