@@ -16,11 +16,6 @@
 
                     Bienvenid@ de nuevo, {{ Auth::user()->name }}
 
-                    <div id="test-spinner">
-                        <button class="btn btn-primary" type="button" >
-                            Hazme click
-                        </button>
-                    </div>
                 </div>
             </div>
         </div>

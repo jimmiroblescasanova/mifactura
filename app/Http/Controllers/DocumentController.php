@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use Auth;
-use Storage;
 use App\addComprobante;
 use App\addDocumentContent;
+use Auth;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File;
+use Storage;
 use ZipArchive;
 
 class DocumentController extends Controller
@@ -15,44 +16,60 @@ class DocumentController extends Controller
     {
         $documentos = $this->getDocumentType($type);
 
-        return view('documents.index', compact('documentos'));
+        return view('documents.index', [
+            'documentos' => $documentos,
+            'type' => $type,
+        ]);
     }
 
     public function selected(Request $request)
     {
-        $zip_file = url('archivo_comprimido');
-        $zip = new ZipArchive();
+        $guid_array = [];
+        $zip_file = 'download-'.NOW()->format('Ymd-His').'.zip';
+        $zip = new ZipArchive;
 
-        $files = \File::files(public_path('storage'));
+        foreach ($request->id as $key) {
+            $document = $this->findGuidDocument($request->type, $key);
 
-        if ($zip->open($zip_file . '.zip', ZipArchive::CREATE) === TRUE) {
+             if (!Storage::disk('public')->exists($document.'.xml')) {
+                 $documento = $this->storeDocumentToPublic($document);
+             }
+            array_push($guid_array, $document.'.xml');
+        }
+
+        if ($zip->open(public_path('storage/'.$zip_file), ZipArchive::CREATE) === TRUE) {
+            $files = File::files(public_path('storage'));
+
             foreach ($files as $key => $value) {
                 $relativeNameInZipFile = basename($value);
-                $zip->addFile($value, $relativeNameInZipFile);
+
+                foreach ($guid_array as $guid) {
+
+                    if (strtolower($guid) == $relativeNameInZipFile) {
+                        $zip->addFile($value, $relativeNameInZipFile);
+                    }
+                }
             }
             $zip->close();
         }
 
-        return response()->download($zip_file . '.zip');
+        return response()->json([
+            'filename' => $zip_file,
+        ], 200);
     }
 
     public function download($file)
     {
-        return Storage::disk('public')
-            ->download('' . $file);
+        // return Storage::disk('public')->download($file);
+        return response()->download(public_path('storage/'.$file));
     }
 
     public function xml()
     {
-        $document = addDocumentContent::where('GuidDocument', request()->input('GuidDocument'))
-            ->first();
-
-        // Save file to storage folder
-        Storage::disk('public')
-            ->put('/' . $document['FileName'], $document['Content']);
+        $documento = $this->storeDocumentToPublic(request()->input('GuidDocument'));
 
         return response()->json([
-            'filename' => $document['FileName'],
+            'filename' => $documento['FileName'],
         ], 200);
     }
 
@@ -70,5 +87,28 @@ class DocumentController extends Controller
             ['RFCReceptor', Auth::user()->rfc],
             ['TipoComprobante', $type]
         ])->get();
+    }
+
+    protected function storeDocumentToPublic($guid)
+    {
+        // Find the first document on database
+        $document = addDocumentContent::where('GuidDocument', $guid)
+            ->first();
+
+        // Save file to storage folder
+        Storage::disk('public')
+            ->put('/' . $document['FileName'], $document['Content']);
+
+        return $document;
+    }
+
+    protected function findGuidDocument($type, $folio)
+    {
+        $document = addComprobante::where([
+            ['TipoComprobante', $type],
+            ['Folio', $folio],
+        ])->first();
+
+        return $document['GuidDocument'];
     }
 }
