@@ -16,7 +16,8 @@ class addComprobante extends Model
     ];
 
     protected $casts = [
-      'Total' => 'double',
+        'Subtotal' => 'double',
+        'Total' => 'double',
     ];
 
 }

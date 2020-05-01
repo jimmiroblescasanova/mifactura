@@ -42,7 +42,7 @@
                                         <td class="text-right">$ {{ convertir_a_numero($docto->Total) }}</td>
                                         <td class="text-right">
                                             <button type="button" class="btn btn-primary btn-sm getXML" data-guid="{{ $docto->GuidDocument }}">XML</button>
-                                            <button type="button" class="btn btn-danger btn-sm getPDF" data-guid="{{ $docto->GuidDocument }}">PDF</button>
+                                            <a href="{{ route('documents.download.test', $docto->GuidDocument) }}" class="btn btn-danger btn-sm" target="_blank">PDF</a>
                                         </td>
                                     </tr>
                                 @empty
@@ -159,14 +159,14 @@
                 });
             });
 
-            $('.getPDF').on('click', function (e) {
+            /*$('.getPDF').on('click', function (e) {
                 e.preventDefault();
 
                 const btn = $(this);
                 const GuidDocument = btn.data('guid');
 
                 const token = $('meta[name="csrf-token"]').attr('content');
-                const route = "{{ route('documents.download.pdf') }}";
+                const route = "";
 
                 btn.html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Espera...');
 
@@ -188,7 +188,7 @@
                         console.log('Error: '+response);
                     },
                 });
-            });
+            });*/
         });
     </script>
 @stop
