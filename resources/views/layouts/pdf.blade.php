@@ -7,138 +7,275 @@
     <style type="text/css" media="all">
         body {
             background: white;
+            font-family: "Nunito", sans-serif;
+            font-size: 9px;
         }
         table {
-            margin: 0;
-            padding: 0;
+            /*border: 1px solid #999;*/
+            border-collapse: collapse;
+            table-layout: fixed;
             width: 100%;
         }
-        table tr td{
-            border: solid 1px gray;
+        th, td {
             padding: 0;
+            word-wrap: break-word;
         }
-        table.right {
-            float: right;
+
+        .row {
+            display: block;
+            margin-bottom: .5em;
         }
-        tr:nth-child(odd) {
+        .column {
+            display: inline-block;
+            vertical-align: top;
+        }
+        .table {
+            border: 0.5px solid #999;
+        }
+        .table tr:first-child {
+            background-color: #f2f2f2;
+        }
+        .table td {
+            font-size: 8px;
+            padding: 3px;
+        }
+        /* Estilos para los encabezados */
+        #encabezado {
+            margin-bottom: 25px;
+        }
+        #encabezado .logo {
+            text-align: left;
+            vertical-align: top;
+            width: 100px;
+        }
+        #encabezado .fecha {
+            text-align: right;
+            vertical-align: top;
+        }
+        #encabezado .emisor {
+            padding: 3px;
+            text-align: center;
+            vertical-align: middle;
+        }
+        /* Conceptos */
+        #conceptos table td{
+            border: 0.5px solid #999;
+            font-size: 8px;
+        }
+        #conceptos table tr:first-child {
+            text-align: center;
+            vertical-align: middle;
+        }
+        #conceptos table tr:nth-child(odd) {
             background-color:#f2f2f2;
         }
-        .row {
-            display: flex;
-            margin-bottom: .5em;
+        #conceptos .impuestos {
+            font-size: 7px;
+        }
+        /* Zona de leyendas y subtotales */
+        #impuestos table td {
+            text-align: right;
+        }
+        #impuestos .leyendas {
+            text-align: left;
+        }
+
+        #cadenas .cadenasDigitales {
+            font-size: 6px;
+        }
+        #cadenas .qr {
+            text-align: center;
+            vertical-align: middle;
         }
     </style>
 </head>
 <body>
-<div class="row">
-    <table class="table">
+{{-- Encabezados --}}
+<div class="row" id="encabezado">
+    <table>
         <tr>
-            <td>
+            <td class="logo">
                 <img src="{{ public_path('logo.jpg') }}" alt="logotipo" width="80px">
-                <small>{{ $documento->LugarExpDesc .', '. $documento->Fecha->format('d \d\e F \d\e\l Y \a \l\a\s h:i:s a') }}</small>
             </td>
+            <td class="fecha">
+                <small>Lugar de Expedición: {{ $comprobante['LugarExpedicion'] }} <br>
+                    Fecha:  {{ $comprobante['Fecha'] }}</small>
+            </td>
+        </tr>
+        <tr class="emisor">
+            <td colspan="2">
+                <b>{{ $comprobante->Emisor['Nombre'] }}</b>
+            </td>
+        </tr>
+        <tr class="emisor">
+            <td colspan="2">
+                <strong>RFC:</strong> {{ $comprobante->Emisor['RFC'] }} -
+                <strong>Régimen Fiscal:</strong> {{ $comprobante->Emisor['RegimenFiscal'] }}
+            </td>
+        </tr>
+    </table>
+</div>
+{{-- Datos fiscales del documento --}}
+<div class="row" id="datosDocumento">
+    <div class="column" style="width: 40%">
+        <table class="table">
+            <tr>
+                <td>
+                    <b>Folio Fiscal:</b> {{ $comprobante->Complemento->TimbreFiscalDigital['UUID'] }}
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    Fecha SAT: {{ $comprobante->Complemento->TimbreFiscalDigital['FechaTimbrado'] }} <br>
+                    No. de serie del Certificado del SAT: {{ $comprobante->Complemento->TimbreFiscalDigital['NoCertificadoSAT'] }}
+                    <br>
+                    Serie del Certificado del emisor: {{ $comprobante['NoCertificado'] }} <br>
+                    Versión CFDI: {{ $comprobante['Version'] }}
+                </td>
+            </tr>
+        </table>
+    </div>
+    <div class="column" style="width: 15%">&nbsp;</div>
+    <div class="column" style="width: 40%">
+        <table class="table">
+            <tr>
+                <td>
+                    <b>Serie y Folio: </b> {{ $comprobante->Receptor['Nombre'] }}
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    Tipo de Comprobante: {{ $comprobante['TipoDeComprobante'] }}<br>
+                    Forma de Pago: {{ $comprobante['FormaPago'] }} <br>
+                    Método de Pago: {{ $comprobante['MetodoPago'] }}<br>
+                    Moneda: {{ $comprobante['Moneda'] }}
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>
+{{-- Receptor --}}
+<div class="row" id="receptor">
+    <table class="table">
+        <tr>
+            <td><strong>FACTURADO A:</strong> {{ $comprobante->Receptor['Nombre'] }}</td>
         </tr>
         <tr>
             <td>
-                <span><b>EMITIDO POR:</b> {{ $documento->NombreEmisor }}</span>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <span><b>RFC:</b> {{ $documento->RFCEmisor }}</span>
-                <span><strong>Régimen Fiscal:</strong> {{ $documento->RegimenEmisor .' - '. $documento->RegimenEmisorDesc }}</span>
+                R.F.C.: {{ $comprobante->Receptor['Rfc'] }}<br>
+                USO CFDI: {{ $comprobante->Receptor['UsoCFDI'] }}
             </td>
         </tr>
     </table>
 </div>
-
-<div class="row">
-    <table class="table" style="width: 45%;">
-        <tr>
-            <td>Folio Fiscal:</td>
-        </tr>
-        <tr>
-            <td>Fecha SAT:</td>
-        </tr>
-    </table>
-    <table class="table right" style="width: 45%;">
-        <tr>
-            <td>Folio:</td>
-        </tr>
-        <tr>
-            <td>Tipo de Comprobante:</td>
-        </tr>
-    </table>
-</div>
-
-<div class="row">
-    <table class="table">
-        <tr>
-            <td>FACTURADO A: {{ $documento->NombreReceptor }}</td>
-        </tr>
-        <tr>
-            <td>USO CFDI: </td>
-        </tr>
-    </table>
-</div>
-
-<div class="row">
-    <table class="table">
+{{-- Movimientos del documento --}}
+<div class="row" id="conceptos">
+    <table>
         <tr>
             <td>Cantidad</td>
             <td>Unidad</td>
             <td>Clave Prod/Serv</td>
-            <td>Descripción</td>
+            <td style="width: 50%;">Descripción</td>
             <td>Precio Unitario</td>
             <td>Importe</td>
         </tr>
-        @foreach ($conceptos as $row)
+        @foreach (($comprobante->Conceptos)() as $row)
             <tr>
-                <td>{{ $row->Cantidad }}</td>
-                <td>{{ $row->ClaveUnidad }}</td>
-                <td>{{ $row->CveProdSer }}</td>
-                <td>{{ $row->Descripcion }}</td>
-                <td>{{ $row->ValorUnitario }}</td>
-                <td>{{ $row->Importe }}</td>
+                <td>{{ $row['Cantidad'] }}</td>
+                <td>{{ $row['ClaveUnidad'] }}</td>
+                <td>{{ $row['ClaveProdServ'] }}</td>
+                <td>{{ $row['Descripcion'] }}</td>
+                <td>{{ $row['ValorUnitario'] }}</td>
+                <td>{{ $row['Importe'] }}</td>
+            </tr>
+            <tr class="impuestos">
+                <td colspan="6">
+                    @if (isset($row->Impuestos->Traslados))
+                        Impuestos trasladados:
+                        @foreach (($row->Impuestos->Traslados)() as $traslado)
+                            Tipo: {{ $traslado['Impuesto'] }} - {{ TipoDeImpuestos($traslado['Impuesto']) }},
+                            Importe: {{ $traslado['Importe'] }},
+                            Tasa o Cuota: {{ $traslado['TasaOCuota'] }};
+                        @endforeach
+                        <br>
+                    @endif
+
+                    @if (isset($row->Impuestos->Retenciones))
+                        Impuestos retenidos:
+                        @foreach (($row->Impuestos->Retenciones)() as $retencion)
+                            Tipo: {{ $retencion['Impuesto'] }} - {{ TipoDeImpuestos($retencion['Impuesto']) }},
+                            Importe: {{ $retencion['Importe'] }},
+                            Tasa o Cuota: {{ $retencion['TasaOCuota'] }};
+                        @endforeach
+                        <br>
+                    @endif
+                </td>
             </tr>
         @endforeach
     </table>
 </div>
-<div class="row">
+{{-- Zona de leyendas y subtotales --}}
+<div class="row" id="impuestos">
     <table>
         <tr>
-            <td rowspan="4" colspan="4">
-                Este documento es una representación impresa de un CFDI.
+            <td rowspan="4" colspan="4" class="leyendas">
+                Este documento es una representación impresa de un CFDI. <br>
+{{--                CANTIDAD CON LETRA--}}
             </td>
             <td>Subtotal:</td>
-            <td>{{ $documento->Subtotal }}</td>
+            <td>$ {{ convertir_a_numero($comprobante['Subtotal']) }}</td>
         </tr>
         <tr>
             <td>Impuestos Trasladados:</td>
-            <td>{{ $documento->TotalImpTraslado }}</td>
+            <td>$ {{ convertir_a_numero($comprobante->Impuestos['TotalImpuestosTrasladados']) }}</td>
         </tr>
         <tr>
             <td>Impuestos Retenidos:</td>
-            <td>{{ $documento->TotalImpRetenidos }}</td>
+            <td>
+                @if (isset($comprobante->Impuestos['TotalImpuestosRetenidos']))
+                    $ {{ $comprobante->Impuestos['TotalImpuestosRetenidos'] }}
+                @else
+                    $ 0.00
+                @endif
+            </td>
         </tr>
         <tr>
             <td>TOTAL:</td>
-            <td>{{ $documento->Total }}</td>
+            <td>$ {{ convertir_a_numero($comprobante['Total']) }}</td>
         </tr>
     </table>
 </div>
-
-<div class="row">
+{{-- Cadenas digitales --}}
+<div class="row" id="cadenas">
     <table>
         <tr>
-            <td rowspan="2">QR</td>
-            <td>Sello digital emisor</td>
+            <td rowspan="2" class="qr">
+                <img alt="QR" src="data:image/png;base64, {{ base64_encode(QrCode::format('png')->size(125)->generate('https://verificacfdi.facturaelectronica.sat.gob.mx/default.aspx?id='. $comprobante->Complemento->TimbreFiscalDigital['UUID'])) }} ">
+            </td>
+            <td style="width: 75%;">Sello digital emisor: <br>
+                <span class="cadenasDigitales">
+                    {{ $comprobante->Complemento->TimbreFiscalDigital['SelloCFD'] }}
+                </span>
+            </td>
         </tr>
         <tr>
-            <td>Sello digital SAT</td>
+            <td>Sello digital SAT: <br>
+                <span class="cadenasDigitales">
+                    {{ $comprobante->Complemento->TimbreFiscalDigital['SelloSAT'] }}
+                </span>
+            </td>
         </tr>
         <tr>
-            <td colspan="2">Cadena Original</td>
+            <td colspan="2">Cadena Original <br>
+                <span class="cadenasDigitales">
+                    ||{{ $comprobante->Complemento->TimbreFiscalDigital['Version'] }}
+                    |{{ $comprobante->Complemento->TimbreFiscalDigital['UUID'] }}
+                    |{{ $comprobante->Complemento->TimbreFiscalDigital['FechaTimbrado'] }}
+                    |{{ $comprobante->Complemento->TimbreFiscalDigital['RfcProvCertif'] }}
+                    |{{ $comprobante->Complemento->TimbreFiscalDigital['SelloCFD'] }}
+                    |{{ $comprobante->Complemento->TimbreFiscalDigital['NoCertificadoSAT'] }}||
+                </span>
+            </td>
         </tr>
     </table>
 </div>
