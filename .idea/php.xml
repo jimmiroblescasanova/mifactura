@@ -113,6 +113,8 @@
       <path value="$PROJECT_DIR$/vendor/eclipxe/xmlresourceretriever" />
       <path value="$PROJECT_DIR$/vendor/eclipxe/cfdiutils" />
       <path value="$PROJECT_DIR$/vendor/eclipxe/xmlschemavalidator" />
+      <path value="$PROJECT_DIR$/vendor/simplesoftwareio/simple-qrcode" />
+      <path value="$PROJECT_DIR$/vendor/bacon/bacon-qr-code" />
     </include_path>
   </component>
   <component name="PhpProjectSharedConfiguration" php_language_level="7.2" />

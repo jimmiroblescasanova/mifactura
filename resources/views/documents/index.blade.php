@@ -42,7 +42,7 @@
                                         <td class="text-right">$ {{ convertir_a_numero($docto->Total) }}</td>
                                         <td class="text-right">
                                             <button type="button" class="btn btn-primary btn-sm getXML" data-guid="{{ $docto->GuidDocument }}">XML</button>
-                                            <a href="{{ route('documents.download.test', $docto->GuidDocument) }}" class="btn btn-danger btn-sm" target="_blank">PDF</a>
+                                            <a href="{{ route('documents.download.pdf', $docto->GuidDocument) }}" class="btn btn-danger btn-sm" target="_blank">PDF</a>
                                         </td>
                                     </tr>
                                 @empty

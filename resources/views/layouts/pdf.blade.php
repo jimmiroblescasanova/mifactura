@@ -220,7 +220,7 @@
         <tr>
             <td rowspan="4" colspan="4" class="leyendas">
                 Este documento es una representación impresa de un CFDI. <br>
-                CANTIDAD CON LETRA
+{{--                CANTIDAD CON LETRA--}}
             </td>
             <td>Subtotal:</td>
             <td>$ {{ convertir_a_numero($comprobante['Subtotal']) }}</td>
@@ -231,7 +231,13 @@
         </tr>
         <tr>
             <td>Impuestos Retenidos:</td>
-            <td>$ {{ $comprobante->Impuestos['TotalImpuestosRetenidos'] }}</td>
+            <td>
+                @if (isset($comprobante->Impuestos['TotalImpuestosRetenidos']))
+                    $ {{ $comprobante->Impuestos['TotalImpuestosRetenidos'] }}
+                @else
+                    $ 0.00
+                @endif
+            </td>
         </tr>
         <tr>
             <td>TOTAL:</td>
@@ -243,7 +249,9 @@
 <div class="row" id="cadenas">
     <table>
         <tr>
-            <td rowspan="2" class="qr">QR</td>
+            <td rowspan="2" class="qr">
+                <img alt="QR" src="data:image/png;base64, {{ base64_encode(QrCode::format('png')->size(125)->generate('https://verificacfdi.facturaelectronica.sat.gob.mx/default.aspx?id='. $comprobante->Complemento->TimbreFiscalDigital['UUID'])) }} ">
+            </td>
             <td style="width: 75%;">Sello digital emisor: <br>
                 <span class="cadenasDigitales">
                     {{ $comprobante->Complemento->TimbreFiscalDigital['SelloCFD'] }}
@@ -260,7 +268,12 @@
         <tr>
             <td colspan="2">Cadena Original <br>
                 <span class="cadenasDigitales">
-                    ||{{ $comprobante->Complemento->TimbreFiscalDigital['Version'] }}|{{ $comprobante->Complemento->TimbreFiscalDigital['UUID'] }}|{{ $comprobante->Complemento->TimbreFiscalDigital['FechaTimbrado'] }}|{{ $comprobante->Complemento->TimbreFiscalDigital['RfcProvCertif'] }}|{{ $comprobante->Complemento->TimbreFiscalDigital['SelloCFD'] }}|{{ $comprobante->Complemento->TimbreFiscalDigital['NoCertificadoSAT'] }}||
+                    ||{{ $comprobante->Complemento->TimbreFiscalDigital['Version'] }}
+                    |{{ $comprobante->Complemento->TimbreFiscalDigital['UUID'] }}
+                    |{{ $comprobante->Complemento->TimbreFiscalDigital['FechaTimbrado'] }}
+                    |{{ $comprobante->Complemento->TimbreFiscalDigital['RfcProvCertif'] }}
+                    |{{ $comprobante->Complemento->TimbreFiscalDigital['SelloCFD'] }}
+                    |{{ $comprobante->Complemento->TimbreFiscalDigital['NoCertificadoSAT'] }}||
                 </span>
             </td>
         </tr>

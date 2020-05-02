@@ -79,28 +79,21 @@ class DocumentController extends Controller
     public function test($guid)
     {
         $document = addDocumentContent::where('GuidDocument', $guid)->first();
-
         $xmlContents = $document->Content;
-
         $comprobante = Cfdi::newFromString($xmlContents)->getQuickReader();
-//        return dump($comprobante);
 
         $pdf = PDF::loadView('layouts.pdf', compact('comprobante'));
         return $pdf->stream();
-//        return view('layouts.pdf', compact('comprobante'));
     }
 
     public function pdf($guid)
     {
-//        $documento = addDocumentContent::where('GuidDocument', request()->input('GuidDocument'))->get();
-        $documento = addComprobante::where('GuidDocument', $guid)
-            ->first();
+        $document = addDocumentContent::where('GuidDocument', $guid)->first();
+        $xmlContents = $document->Content;
+        $comprobante = Cfdi::newFromString($xmlContents)->getQuickReader();
 
-        $conceptos = addConceptos::where('GuidDocument', $guid)->get();
-
-        $pdf = PDF::loadView('layouts.pdf', compact(['documento', 'conceptos']));
+        $pdf = PDF::loadView('layouts.pdf', compact('comprobante'));
         return $pdf->stream();
-//        return view('layouts.pdf', compact('documento'));
     }
 
     protected function getDocumentType($type)
