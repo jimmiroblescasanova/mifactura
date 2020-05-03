@@ -13,6 +13,5 @@ Route::get('documents/{type}', 'DocumentController@index')->name('documents.inde
 Route::post('documents/invoices/selected', 'DocumentController@selected')->name('documents.invoice.selected');
 
 Route::get('documents/ajax/download-pdf/{guid}', 'DocumentController@pdf')->name('documents.download.pdf');
-Route::get('documents/ajax/test/{guid}', 'DocumentController@test')->name('documents.download.test');
 Route::post('documents/ajax/download-xml', 'DocumentController@xml')->name('documents.download.xml');
 Route::get('documents/download/{file}', 'DocumentController@download');

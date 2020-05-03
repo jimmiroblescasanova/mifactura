@@ -136,7 +136,7 @@
                 const btn = $(this);
                 const GuidDocument = btn.data('guid');
 
-                btn.html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Espera...');
+                btn.html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Generando...');
 
                 $.ajax({
                     type: 'POST',
@@ -159,36 +159,6 @@
                 });
             });
 
-            /*$('.getPDF').on('click', function (e) {
-                e.preventDefault();
-
-                const btn = $(this);
-                const GuidDocument = btn.data('guid');
-
-                const token = $('meta[name="csrf-token"]').attr('content');
-                const route = "";
-
-                btn.html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Espera...');
-
-                $.ajax({
-                    type: 'POST',
-                    url: route,
-                    headers: { 'X-CSRF-TOKEN': token },
-                    data: {
-                        GuidDocument: GuidDocument,
-                    },
-                    dataType: 'json',
-                    success: function (response) {
-                        console.log(response[0].FileName);
-
-                        btn.html('PDF');
-                        alert.html('<div class="alert alert-success" role="alert">Tu archivo esta listo para descargar: '+ response[0].FileName +'</div>');
-                    },
-                    error: function (response) {
-                        console.log('Error: '+response);
-                    },
-                });
-            });*/
         });
     </script>
 @stop

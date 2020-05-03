@@ -4,15 +4,14 @@ namespace App\Http\Controllers;
 
 use App;
 use Auth;
-use Barryvdh\DomPDF\Facade as PDF;
-use CfdiUtils\Cfdi;
 use Storage;
 use ZipArchive;
-use App\addConceptos;
+use CfdiUtils\Cfdi;
 use App\addComprobante;
 use App\addDocumentContent;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
+use Barryvdh\DomPDF\Facade as PDF;
 
 class DocumentController extends Controller
 {
@@ -45,7 +44,11 @@ class DocumentController extends Controller
              }
             array_push($guid_array, $document.'.xml');
         }
-//  No se necesita recorrer toda la carpeta de archivos, si tengo el guid de los xml a agregar
+        /*
+         * TODO:
+         * No se necesita recorrer toda la carpeta de archivos,
+         * si tengo el guid de los xml a agregar
+         */
         if ($zip->open(public_path('storage/'.$zip_file), ZipArchive::CREATE) === TRUE) {
             $files = File::files(public_path('storage'));
 
@@ -76,16 +79,6 @@ class DocumentController extends Controller
         ], 200);
     }
 
-    public function test($guid)
-    {
-        $document = addDocumentContent::where('GuidDocument', $guid)->first();
-        $xmlContents = $document->Content;
-        $comprobante = Cfdi::newFromString($xmlContents)->getQuickReader();
-
-        $pdf = PDF::loadView('layouts.pdf', compact('comprobante'));
-        return $pdf->stream();
-    }
-
     public function pdf($guid)
     {
         $document = addDocumentContent::where('GuidDocument', $guid)->first();
@@ -106,11 +99,9 @@ class DocumentController extends Controller
 
     protected function storeDocumentToPublic($guid)
     {
-        // Find the first document on database
         $document = addDocumentContent::where('GuidDocument', $guid)
             ->first();
 
-        // Save file to storage folder
         Storage::disk('public')
             ->put('/' . $document['FileName'], $document['Content']);
 
