@@ -15,26 +15,36 @@
                     <li class="nav-item">
                         <a href="{{ route('home') }}" class="nav-link {{ setActive('home') }}">Inicio</a>
                     </li>
-                    <li class="nav-item dropdown {{ setActive('documents.*') }}">
-                        <a id="documentsDropdown" class="nav-link dropdown-toggle" href="#" role="button"
-                           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                            Mis Documentos <span class="caret"></span>
-                        </a>
-                        <div class="dropdown-menu" aria-labelledby="documentsDropdown">
-                            <a class="dropdown-item" href="{{ route('documents.index', 'I') }}">
-                                Facturas
+                    @if (!Auth::user()->is_admin)
+                        <li class="nav-item dropdown {{ setActive('documents.*') }}">
+                            <a id="documentsDropdown" class="nav-link dropdown-toggle" href="#" role="button"
+                               data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                                Mis Documentos <span class="caret"></span>
                             </a>
-                            <a class="dropdown-item" href="{{ route('documents.index', 'P') }}">
-                                Complementos de Pago
-                            </a>
-                            <a class="dropdown-item" href="{{ route('documents.index', 'E') }}">
-                                Notas de Crédito
-                            </a>
-                        </div>
-                    </li>
+                            <div class="dropdown-menu" aria-labelledby="documentsDropdown">
+                                <a class="dropdown-item" href="{{ route('documents.index', 'I') }}">
+                                    Facturas
+                                </a>
+                                <a class="dropdown-item" href="{{ route('documents.index', 'P') }}">
+                                    Complementos de Pago
+                                </a>
+                                <a class="dropdown-item" href="{{ route('documents.index', 'E') }}">
+                                    Notas de Crédito
+                                </a>
+                            </div>
+                        </li>
+                    @endif
                     <li class="nav-item">
                         <a class="nav-link {{ setActive('user.*') }}" href="{{ route('user.edit') }}">Mis datos</a>
                     </li>
+                    @if (Auth::user()->is_admin)
+                        {{--<li class="nav-item">
+                            <a class="nav-link {{ setActive('admin.empresa') }}" href="{{ route('admin.empresa') }}">Empresa</a>
+                        </li>--}}
+                        <li class="nav-item">
+                            <a class="nav-link {{ setActive('admin.users') }}" href="{{ route('admin.users') }}">Usuarios registrados</a>
+                        </li>
+                    @endif
                 @endauth
             </ul>
 
