@@ -15,6 +15,11 @@ use Barryvdh\DomPDF\Facade as PDF;
 
 class DocumentController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     public function index($type)
     {
         $documentos = $this->getDocumentType($type);

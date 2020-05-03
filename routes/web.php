@@ -15,3 +15,12 @@ Route::post('documents/invoices/selected', 'DocumentController@selected')->name(
 Route::get('documents/ajax/download-pdf/{guid}', 'DocumentController@pdf')->name('documents.download.pdf');
 Route::post('documents/ajax/download-xml', 'DocumentController@xml')->name('documents.download.xml');
 Route::get('documents/download/{file}', 'DocumentController@download');
+
+Route::group(['middleware' => 'admin'], function () {
+    Route::get('admin/empresa/', 'Admin\DashboardController@index')
+        ->name('admin.empresa');
+    Route::get('admin/usuarios-registrados/', 'Admin\RegisteredUsersController@index')
+        ->name('admin.users');
+    Route::post('admin/usuarios-registrados/update', 'Admin\RegisteredUsersController@ChangeAdmin')
+        ->name('admin.users.change-admin');
+});

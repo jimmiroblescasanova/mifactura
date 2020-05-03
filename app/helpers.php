@@ -23,3 +23,15 @@ function TipoDeImpuestos($impuesto)
             return "No se encontró";
     }
 }
+
+function makeRoleBadge($role)
+{
+    switch ($role) {
+        case 1:
+            return '<span class="badge badge-success">Admin</span>';
+        case 0:
+            return '<span class="badge badge-info text-white">Usuario</span>';
+        default:
+            return 'Error';
+    }
+}
