@@ -7,16 +7,13 @@
                 <div class="card">
                         <input type="hidden" name="type" value="{{ $type }}">
                         <div class="card-header d-flex justify-content-between">
-                            <span>Todas mis facturas</span>
+                            <span>Mis {{ ($type == "P") ? 'Complementos de Pago' : 'CFDI' }}</span>
                             <button class="btn btn-primary btn-sm" type="submit" id="downloadSelected">Descargar seleccionados</button>
                         </div>
                         @csrf
                         <div class="card-body table-responsive">
                             <div class="alert alert-success" role="alert" id="alert">
                                 <span id="alert-text"></span>
-                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
                             </div>
 
                             <table class="table table-striped table-hover" id="invoices" style="width: 100%;">
@@ -42,7 +39,7 @@
                                         <td class="text-right">$ {{ convertir_a_numero($docto->Total) }}</td>
                                         <td class="text-right">
                                             <button type="button" class="btn btn-primary btn-sm getXML" data-guid="{{ $docto->GuidDocument }}">XML</button>
-                                            <a href="{{ route('documents.download.pdf', $docto->GuidDocument) }}" class="btn btn-danger btn-sm" target="_blank">PDF</a>
+                                            <a href="{{ route('documents.download.pdf', [$type, $docto->GuidDocument]) }}" class="btn btn-danger btn-sm" target="_blank">PDF</a>
                                         </td>
                                     </tr>
                                 @empty
@@ -83,7 +80,7 @@
                     'style': 'multi'
                 },
                 'order': [
-                    [1, 'asc']
+                    [1, 'desc']
                 ],
             });
 
@@ -136,7 +133,7 @@
                 const btn = $(this);
                 const GuidDocument = btn.data('guid');
 
-                btn.html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Generando...');
+                btn.html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>');
 
                 $.ajax({
                     type: 'POST',

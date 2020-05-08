@@ -84,13 +84,19 @@ class DocumentController extends Controller
         ], 200);
     }
 
-    public function pdf($guid)
+    public function pdf($type, $guid)
     {
         $document = addDocumentContent::where('GuidDocument', $guid)->first();
         $xmlContents = $document->Content;
         $comprobante = Cfdi::newFromString($xmlContents)->getQuickReader();
 
-        $pdf = PDF::loadView('layouts.pdf', compact('comprobante'));
+        if ($type == "P")
+        {
+            $pdf = PDF::loadView('pdf.payment', compact('comprobante'));
+        } else {
+            $pdf = PDF::loadView('pdf.invoice', compact('comprobante'));
+        }
+
         return $pdf->stream();
     }
 

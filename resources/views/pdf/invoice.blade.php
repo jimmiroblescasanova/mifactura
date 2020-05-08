@@ -140,7 +140,7 @@
         <table class="table">
             <tr>
                 <td>
-                    <b>Serie y Folio: </b> {{ $comprobante->Receptor['Nombre'] }}
+                    <b>Serie y Folio: </b> {{ $comprobante['Serie'] .''. $comprobante['Folio'] }}
                 </td>
             </tr>
             <tr>
