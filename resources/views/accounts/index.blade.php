@@ -128,6 +128,7 @@
 
             if($('input[name=fecha_inicial]').checkEmpty() && $('input[name=fecha_final]').checkEmpty())
             {
+                SendForm.prop('disabled', 'true');
                 SendForm.html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Cargando...');
             reporte.html('');
 
@@ -166,6 +167,7 @@
                         reporte.append(table);
                     });
                     SendForm.html('<i class="fas fa-search"></i> Vista previa');
+                    SendForm.removeAttr('disabled');
                 },
                 error: function (response) {
                     console.log('Error: ' + response);
