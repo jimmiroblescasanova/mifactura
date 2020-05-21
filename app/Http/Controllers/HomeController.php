@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\admDocumentos;
 use Illuminate\Http\Request;
+use Auth;
 
 class HomeController extends Controller
 {

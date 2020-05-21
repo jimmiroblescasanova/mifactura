@@ -33,6 +33,9 @@
                                 </a>
                             </div>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link {{ setActive('account.index') }}" href="{{ route('account.index') }}">Estados de cuenta</a>
+                        </li>
                     @endif
                     <li class="nav-item">
                         <a class="nav-link {{ setActive('user.*') }}" href="{{ route('user.edit') }}">Mis datos</a>

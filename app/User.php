@@ -38,11 +38,6 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    public function setUserPassword($psw)
-    {
-        $this->attributes['password'] = Hash::make($psw);
-    }
-
     public function setNameAttribute($name)
     {
         $this->attributes['name'] = strtoupper($name);
@@ -67,5 +62,10 @@ class User extends Authenticatable
     public function sendPasswordResetNotification($token)
     {
         $this->notify(new ResetPasswordNotification($token));
+    }
+
+    protected function setUserPassword($psw)
+    {
+        $this->attributes['password'] = Hash::make($psw);
     }
 }

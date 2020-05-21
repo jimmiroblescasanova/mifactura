@@ -5,51 +5,56 @@
         <div class="row justify-content-center">
             <div class="col-md-10">
                 <div class="card">
-                        <input type="hidden" name="type" value="{{ $type }}">
-                        <div class="card-header d-flex justify-content-between">
-                            <span>Mis {{ ($type == "P") ? 'Complementos de Pago' : 'CFDI' }}</span>
-                            <button class="btn btn-primary btn-sm" type="submit" id="downloadSelected">Descargar seleccionados</button>
+                    <input type="hidden" name="type" value="{{ $type }}">
+                    <div class="card-header d-flex justify-content-between">
+                        <span>Mis {{ ($type == "P") ? 'Complementos de Pago' : 'CFDI' }}</span>
+                        <button class="btn btn-primary btn-sm" type="submit" id="downloadSelected">Descargar
+                            seleccionados
+                        </button>
+                    </div>
+                    @csrf
+                    <div class="card-body table-responsive">
+                        <div class="alert alert-success" role="alert" id="alert">
+                            <span id="alert-text"></span>
                         </div>
-                        @csrf
-                        <div class="card-body table-responsive">
-                            <div class="alert alert-success" role="alert" id="alert">
-                                <span id="alert-text"></span>
-                            </div>
 
-                            <table class="table table-striped table-hover" id="invoices" style="width: 100%;">
-                                <thead>
+                        <table class="table table-striped table-hover" id="invoices" style="width: 100%;">
+                            <thead>
+                            <tr>
+                                <th></th>
+                                <th>Fecha</th>
+                                <th>Serie</th>
+                                <th>Folio</th>
+                                <th>UUID</th>
+                                <th>Total</th>
+                                <th>Descargar</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            @forelse ($documentos as $docto)
                                 <tr>
-                                    <th></th>
-                                    <th>Fecha</th>
-                                    <th>Serie</th>
-                                    <th>Folio</th>
-                                    <th>UUID</th>
-                                    <th>Total</th>
-                                    <th>Descargar</th>
+                                    <td>{{ $docto->Folio }}</td>
+                                    <td>{{ $docto->Fecha->format('Y-m-d') }}</td>
+                                    <td>{{ $docto->Serie }}</td>
+                                    <td>{{ $docto->Folio }}</td>
+                                    <td>{{ $docto->UUID }}</td>
+                                    <td class="text-right">$ {{ convertir_a_numero($docto->Total) }}</td>
+                                    <td class="text-right">
+                                        <button type="button" class="btn btn-primary btn-sm getXML"
+                                                data-guid="{{ $docto->GuidDocument }}">XML
+                                        </button>
+                                        <a href="{{ route('documents.download.pdf', [$type, $docto->GuidDocument]) }}"
+                                           class="btn btn-danger btn-sm" target="_blank">PDF</a>
+                                    </td>
                                 </tr>
-                                </thead>
-                                <tbody>
-                                @forelse ($documentos as $docto)
-                                    <tr>
-                                        <td>{{ $docto->Folio }}</td>
-                                        <td>{{ $docto->Fecha->format('Y-m-d') }}</td>
-                                        <td>{{ $docto->Serie }}</td>
-                                        <td>{{ $docto->Folio }}</td>
-                                        <td>{{ $docto->UUID }}</td>
-                                        <td class="text-right">$ {{ convertir_a_numero($docto->Total) }}</td>
-                                        <td class="text-right">
-                                            <button type="button" class="btn btn-primary btn-sm getXML" data-guid="{{ $docto->GuidDocument }}">XML</button>
-                                            <a href="{{ route('documents.download.pdf', [$type, $docto->GuidDocument]) }}" class="btn btn-danger btn-sm" target="_blank">PDF</a>
-                                        </td>
-                                    </tr>
-                                @empty
-                                    <tr>
-                                        <td colspan="7">No hay registros.</td>
-                                    </tr>
-                                @endforelse
-                                </tbody>
-                            </table>
-                        </div>
+                            @empty
+                                <tr>
+                                    <td colspan="7">No hay registros.</td>
+                                </tr>
+                            @endforelse
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
@@ -58,7 +63,7 @@
 
 @section('scripts')
     <script>
-        $(document).ready(function(){
+        $(document).ready(function () {
             const alert = $('#alert');
             const alertText = $('#alert-text');
             alert.hide();
@@ -84,7 +89,7 @@
                 ],
             });
 
-            $('#downloadSelected').on('click', function(e) {
+            $('#downloadSelected').on('click', function (e) {
                 e.preventDefault();
 
                 const btn = $(this);
@@ -106,7 +111,7 @@
                 $.ajax({
                     type: 'POST',
                     url: route,
-                    headers: { 'X-CSRF-TOKEN': token },
+                    headers: {'X-CSRF-TOKEN': token},
                     data: {
                         type: type,
                         id: IdSelected,
@@ -117,10 +122,10 @@
 
                         btn.html('Descargar seleccionados');
                         alert.show();
-                        alertText.html('Tu archivo esta listo para descargar: <a href="{{ url('documents/download') }}/'+ response.filename +'">'+ response.filename +'</a>');
+                        alertText.html('Tu archivo esta listo para descargar: <a href="{{ url('documents/download') }}/' + response.filename + '">' + response.filename + '</a>');
                     },
                     error: function (response) {
-                        console.log('Error: '+response);
+                        console.log('Error: ' + response);
                     },
                 });
             });
@@ -138,7 +143,7 @@
                 $.ajax({
                     type: 'POST',
                     url: route,
-                    headers: { 'X-CSRF-TOKEN': token },
+                    headers: {'X-CSRF-TOKEN': token},
                     data: {
                         GuidDocument: GuidDocument,
                     },
@@ -148,10 +153,10 @@
 
                         btn.html('XML');
                         alert.show();
-                        alertText.html('Tu archivo esta listo para descargar: <a href="{{ url('documents/download') }}/'+ response.filename +'">'+ response.filename +'</a>');
+                        alertText.html('Tu archivo esta listo para descargar: <a href="{{ url('documents/download') }}/' + response.filename + '">' + response.filename + '</a>');
                     },
                     error: function (response) {
-                        console.log('Error: '+response);
+                        console.log('Error: ' + response);
                     },
                 });
             });

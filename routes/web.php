@@ -3,9 +3,6 @@
 Auth::routes();
 Route::get('/', 'HomeController@index')->name('home');
 
-Route::get('search', 'SearchController@index');
-Route::post('search', 'SearchController@search')->name('search');
-
 Route::patch('user', 'UserController@update')->name('user.update');
 Route::get('user/edit', 'UserController@index')->name('user.edit');
 
@@ -15,6 +12,10 @@ Route::post('documents/invoices/selected', 'DocumentController@selected')->name(
 Route::post('documents/ajax/download-xml', 'DocumentController@xml')->name('documents.download.xml');
 Route::get('documents/{type}/pdf/{guid}', 'DocumentController@pdf')->name('documents.download.pdf');
 Route::get('documents/download/{file}', 'DocumentController@download');
+
+Route::get('estados-de-cuenta', 'AccountStatementController@index')->name('account.index');
+Route::post('estados-de-cuenta/reporte', 'AccountStatementController@reporte')->name('account.reporte');
+Route::post('estados-de-cuenta/excel', 'AccountStatementController@excel')->name('account.excel');
 
 Route::group(['middleware' => 'admin'], function () {
     Route::get('admin/empresa/', 'Admin\DashboardController@index')
