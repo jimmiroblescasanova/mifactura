@@ -8,18 +8,8 @@
             <div class="card">
                 <div class="card-body">
                     <p>AJAX</p>
-                    <table class="table">
-                        <thead>
-                            <tr>
-                                <th>FECHA</th>
-                                <th>FOLIO</th>
-                                <th>TOTAL</th>
-                            </tr>
-                        </thead>
-                        <tbody id="table-body">
-                            
-                        </tbody>
-                    </table>
+                    
+                     <div id="table-body"></div>     
                 </div>
                 <div class="card-footer pb-0">
                     <nav aria-label="Page navigation example">
@@ -49,10 +39,11 @@
         type: 'GET',
         url: route,
         headers: {'X-CSRF-TOKEN': token},
-        dataType: 'json',
+        dataType: 'html',
         success: function (response) {
-            $('#next-page').attr('href', response.next_page_url);
+            // $('#next-page').attr('href', response.next_page_url);
             console.log(response);
+            $('#table-body').html(response);
             
         },
         error: function (response) {

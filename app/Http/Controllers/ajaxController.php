@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\admDocumentos;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\View;
 
 class ajaxController extends Controller
 {
@@ -13,7 +14,7 @@ class ajaxController extends Controller
         if ($request->ajax()) {
             $usuarios = admDocumentos::where('CRFC', Auth::user()->rfc)->paginate();
 
-            return response()->json($usuarios, 200);
+            return view('partials.facturas', compact('usuarios'));
         }
 
         return view('ajax');
