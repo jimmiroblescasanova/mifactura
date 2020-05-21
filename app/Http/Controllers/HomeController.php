@@ -25,6 +25,12 @@ class HomeController extends Controller
      */
     public function index()
     {
+        /* $saldo_total = admDocumentos::where([
+            ['CRFC', Auth::user()->rfc],
+            ['CIDDOCUMENTODE', 4],
+            ['CFECHA', NOW()->format('Y-m-d')]
+            ])->sum('CPENDIENTE'); */
+
         return view('home');
     }
 }

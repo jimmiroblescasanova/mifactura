@@ -19,7 +19,7 @@
                             <div class="card-counter danger">
                                 <i class="fas fa-dollar-sign"></i>
                                 <a href="{{ route('account.index') }}">
-                                    <span class="count-numbers">1</span>
+                                    <span class="count-numbers">{{ $saldo }}</span>
                                     <span class="count-name">Saldo actual</span>
                                 </a>
                             </div>
@@ -43,8 +43,9 @@
                                     <span class="count-name">REP</span>
                                 </a>
                             </div>
-                        </div> --}}
-                    </div>
+                        </div>
+                    </div> --}}
+                    <a href="{{ route('ajax') }}">Prueba ajax</a>
                 </div>
             </div>
         </div>

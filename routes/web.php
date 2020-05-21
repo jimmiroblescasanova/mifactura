@@ -17,6 +17,8 @@ Route::get('estados-de-cuenta', 'AccountStatementController@index')->name('accou
 Route::post('estados-de-cuenta/reporte', 'AccountStatementController@reporte')->name('account.reporte');
 Route::post('estados-de-cuenta/excel', 'AccountStatementController@excel')->name('account.excel');
 
+Route::get('ajax', 'ajaxController@index')->name('ajax');
+
 Route::group(['middleware' => 'admin'], function () {
     Route::get('admin/empresa/', 'Admin\DashboardController@index')
         ->name('admin.empresa');
