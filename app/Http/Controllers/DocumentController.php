@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App;
 use Auth;
 use Storage;
 use ZipArchive;

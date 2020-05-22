@@ -2,9 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\admDocumentos;
-use Illuminate\Http\Request;
-use Auth;
+use Illuminate\Contracts\Support\Renderable;
 
 class HomeController extends Controller
 {
@@ -21,7 +19,7 @@ class HomeController extends Controller
     /**
      * Show the application dashboard.
      *
-     * @return \Illuminate\Contracts\Support\Renderable
+     * @return Renderable
      */
     public function index()
     {
