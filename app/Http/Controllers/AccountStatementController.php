@@ -2,18 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use App\admAsocCargosAbonos;
 use App\admDocumentos;
 use App\Exports\EDCExport;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Maatwebsite\Excel\Facades\Excel;
+use App\Http\Requests\EstadoDeCuentaRequest;
 
 class AccountStatementController extends Controller
 {
-    /**
-     * AccountStatementController constructor.
-     */
     public function __construct()
     {
         $this->middleware('auth');
@@ -24,7 +21,7 @@ class AccountStatementController extends Controller
         return view('accounts.index');
     }
 
-    public function reporte(Request $request)
+    public function reporte(EstadoDeCuentaRequest $request)
     {
         $documentos = admDocumentos::with('concepto')->where('CRFC', Auth::user()->rfc)
             ->whereIn('CIDDOCUMENTODE', [4,5,7,9,12])
@@ -52,7 +49,7 @@ class AccountStatementController extends Controller
 
     public function excel(Request $request)
     {
-        return Excel::download(new EDCExport($request), 'estadosdecuenta.xlsx');
+        return Excel::download(new EDCExport($request), 'estados_de_cuenta.xlsx');
     }
 
 }

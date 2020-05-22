@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class admDocumentos extends Model
 {
-    protected $connection = "sqlsrv";
+    protected $connection = "sql_srv";
 
     protected $table = 'admDocumentos';
 
